@@ -1,0 +1,10 @@
+\ tiny forth standard
+
+core:           compile : ;
+varables:       stack-ptr rstack dict
+memory:         read write move  
+stack:          push pop pick
+parsing:        #
+math:           + - * / % 
+bin:            and or xor invert >> << 
+
