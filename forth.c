@@ -20,16 +20,16 @@
     STRCPY(nam, dict[dp].name)        \
     STRCPY(cod, dict[dp].code)
 
-#define LOOKUP(word)     \
-    printf("lookup: %s\n", word);
-    for(i=0; STRCMP(dict[i].name[
-]
+#define LOOKUP(word)              \
+    printf("lookup: %s\n", word); \
+    input_buffer_ptr = &word[0];  \
+    for(i=0; STRCMP(dict[i].name
 
 // This is put at the end of asm primatives
-#define NEXT                \
-    ip = nip;               \
-    nip++;                  \
-    printf("goto **%p -> %p\n", ip, **ip);\
+#define NEXT                                \
+    ip = nip;                               \
+    nip++;                                  \
+    printf("goto **%p -> %p\n", ip, **ip);  \
     goto ***ip;
 
 /* structures */
@@ -40,6 +40,7 @@
     // buffers
         char    input[1000];
         char    input_buffer[40];
+        char*   input_buffer_ptr;
         void*** code[100];
     // stack
         int    sp =  -1; // sp:  Stack ptr (First push will push [-1] to [0])
@@ -50,6 +51,7 @@
     // dictionary
         int    dp =  -1; // dp:  Dict ptr
         struct entry { char name[40]; void** code[200]; } dict[1000];
+        char*  dict_name_ptr;
 
 int main(void)
 {
@@ -101,7 +103,7 @@ int main(void)
         while(1) {
             if(*inp = '\n') {goto end}
             if(*inp = '\0') {goto end}
-            if(*inp = ' ') {LOOKUP; i = 0}
+            if(*inp = ' ') {LOOKUP(); i = 0}
             buffer[i] = *inp;
             i++;
             inp++;
