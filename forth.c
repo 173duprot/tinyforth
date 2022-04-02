@@ -64,10 +64,6 @@ int main(void)
     void* exit_a[] = { &&exit, 0};
     BUILTIN(exit, exit_n, exit_a)
 
-    char  repl_n[] = "repl";
-    void* repl_a[] = { &&repl, 0 };
-    BUILTIN(repl, repl_n, repl_a)
-
     char  test_n[] = "test";
     void* test_a[] = { &&docol, exit, 0 };
     BUILTIN(test, test_n, test_a)
@@ -97,16 +93,4 @@ int main(void)
         printf("\nbye:\n");
         return 0;
 
-    repl:
-        scanf("%s", input);
-        i = 0;
-        while(1) {
-            if(*inp = '\n') {goto end}
-            if(*inp = '\0') {goto end}
-            if(*inp = ' ') {LOOKUP(); i = 0}
-            buffer[i] = *inp;
-            i++;
-            inp++;
-        }
-        end:
 };
