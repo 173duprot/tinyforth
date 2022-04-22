@@ -1,8 +1,47 @@
 \ tinyforth
 
-Forth in under 100 lines of GNU C99.
-What is Forth?
+	Forth in under 100 lines of GNU C99.
 
+
+Abstract
+
+	Forth is a extremly powerful, typeless language, however, imo, its elegence
+	is offen tainted by small, unelegent standard peices of code, which limit
+	hackability in a way that simply isn't forth-like.
+	
+	For example, in regular forth, literals are quite literally baked into the
+	interpriter, to the point where changing this behavior, adding debugigng 
+	features, anything - would require special hooks, weird hacks, and general
+	inconvient, uncomfortable and akward hacking.
+	
+	
+	
+	To me, this is very un-forth like. ABLEforth solves this issue by putting
+	parsing words front and center stange, there is no built-in literals, all
+	data-types are handled the same way. 
+	
+	
+	\ INDERECT STACK
+	
+	Tinyforth takes ABLE's formula and expands upon it drastically - replacing
+	the first-class int stack, with a general pointer stack. 
+	
+	0 |      | --> |  0 mem  |
+	1 |int  1| --> |  8 mem  |
+	2 |int  5| --> | 16 mem  |
+	3 |char a| --> | 20 mem  |
+	
+	Breakdown:
+	- the stack is a sequential array of pointers.
+	- the stack is initilized to have 1 value on it: 0
+	- when you push a value to the stack 
+	    > allocate the mem
+	        1. grab the current top of the pointer stack
+	        2. add the size of the val your pushing
+	        3. push this new pointer onto the the stack
+	    > write val in the new avalable space
+	
+	
 How does Forth work?
 
     Forth is essentially broken up into 2 parts:
@@ -13,46 +52,6 @@ How does Forth work?
     
     "string" -> shell -> {array} -> forth_vm
                             
-    
-\ tiny forth standard
-
-    Forth is a extremly powerful, typeless language, however, imo, its elegence
-    is offen tainted by small, unelegent standard peices of code, which limit
-    hackability in a way that simply isn't forth-like.
-
-    For example, in regular forth, literals are quite literally baked into the
-    interpriter, to the point where changing this behavior, adding debugigng 
-    features, anything - would require special hooks, weird hacks, and general
-    inconvient, uncomfortable and akward hacking.
-    
-
-    \ PARSING WORDS
-
-    To me, this is very un-forth like. ABLEforth solves this issue by putting
-    parsing words front and center stange, there is no built-in literals, all
-    data-types are handled the same way. 
-
-
-    \ INDERECT STACK
-    
-    Tinyforth takes ABLE's formula and expands upon it drastically - replacing
-    the first-class int stack, with a general pointer stack. 
-
-    0 |      | --> |  0 mem  |
-    1 |int  1| --> |  8 mem  |
-    2 |int  5| --> | 16 mem  |
-    3 |char a| --> | 20 mem  |
-    
-    Breakdown:
-    - the stack is a sequential array of pointers.
-    - the stack is initilized to have 1 value on it: 0
-    - when you push a value to the stack 
-        > allocate the mem
-            1. grab the current top of the pointer stack
-            2. add the size of the val your pushing
-            3. push this new pointer onto the the stack
-        > write val in the new avalable space
-
 
 core:           compile : ;
 varables:       stack-ptr rstack-ptr dict-ptr
