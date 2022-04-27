@@ -34,41 +34,41 @@ Implimentation
 	illusion of a programming language.
 
 	Tinyforth has 3 structures:
-		|
-		| long stack[100];
-		| 	|
-		| 	| This is the stack that holds numbers.
-		| 	|
-		| 	| Every time you type in a value, or have a value returned
-		| 	| it's off this stack.
-		| 	
-		| 	
-		| void *return_stack[100];
-		| 	|
-		| 	| This is the stack that holds return addresses. 
-		| 	| 
-		| 	| Every time you run code
-		| 	|	1. Save current code-pointer on the return stack
-		| 	|	2. Jump to new code
-		| 	|	3. Run
-		| 	|	4. Jump back to code-pointer on the return stack
-		| 	
-		| 	
-		| dict_t dictionary_stack[50];
-		| 	|
-		| 	| This is a key:value namespace stack.
-		| 	| 
-		| 	| It follows this structure
-		| 	|	---------------
-		| 	|	char name[100];
-		| 	|	void* code; 
-		| 	|	---------------
-		| 	| 
-		| 	| Every time you run any code,
-		| 	|
-		| 	|	0. Look up the {name:code}
-		| 	|
-		| 	|	1. Save current code pointer on the return stack
-		| 	|	2. Jump to new {*code}
-		| 	|	3. Run
-		| 	|	4. Jump back to code-pointer on the return stack
+		
+		long stack[100];
+
+			| This is the stack that holds numbers.
+			|
+			| Every time you type in a value, or have a value returned
+			| it's off this stack.
+			
+			
+		void *return_stack[100];
+
+			| This is the stack that holds return addresses. 
+
+			| Every time you run code
+			|	1. Save current code-pointer on the return stack
+			|	2. Jump to new code
+			|	3. Run
+			|	4. Jump back to code-pointer on the return stack
+			
+			
+		dict_t dictionary_stack[50];
+
+			| This is a key:value namespace stack.
+
+			| It follows this structure
+			|	---------------
+			|	char name[100];
+			|	void* code; 
+			|	---------------
+
+			| Every time you run any code,
+			|
+			|	0. Look up the {name:code}
+			|
+			|	1. Save current code pointer on the return stack
+			|	2. Jump to new {*code}
+			|	3. Run
+			|	4. Jump back to code-pointer on the return stack
