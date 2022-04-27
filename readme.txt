@@ -2,7 +2,6 @@
 
 	Forth in under 100 lines of GNU C99.
 
-
 Abstract
 
 	Forth is a extremly powerful, typeless language, however, imo, its elegence
@@ -14,48 +13,56 @@ Abstract
 	features, anything - would require special hooks, weird hacks, and general
 	inconvient, uncomfortable and akward hacking.
 	
-	
-	
-	To me, this is very un-forth like. ABLEforth solves this issue by putting
-	parsing words front and center stange, there is no built-in literals, all
-	data-types are handled the same way. 
-	
-	
-	\ INDERECT STACK
-	
-	Tinyforth takes ABLE's formula and expands upon it drastically - replacing
-	the first-class int stack, with a general pointer stack. 
-	
-	0 |      | --> |  0 mem  |
-	1 |int  1| --> |  8 mem  |
-	2 |int  5| --> | 16 mem  |
-	3 |char a| --> | 20 mem  |
-	
-	Breakdown:
-	- the stack is a sequential array of pointers.
-	- the stack is initilized to have 1 value on it: 0
-	- when you push a value to the stack 
-	    > allocate the mem
-	        1. grab the current top of the pointer stack
-	        2. add the size of the val your pushing
-	        3. push this new pointer onto the the stack
-	    > write val in the new avalable space
-	
-	
-How does Forth work?
+	To me, this is very un-forth like.
 
-    Forth is essentially broken up into 2 parts:
-        - A VIRTUAL MACHENE that itterates over an array of code pointers.
-        - A "SHELL" that interprits text into an array of code pointers.
-    
-    A normal forth program will follow this diagram
-    
-    "string" -> shell -> {array} -> forth_vm
-                            
+	ABLEforth solves this issue by putting parsing words front and center stange,
+	there is no built-in literals, all data-types are handled the same way. 
+	
+	Tinyforth takes ABLE's formula and expands upon it drastically - being
+	unafraid to be completely non-standard in it's quest for simplicity and
+	grockability.
 
-core:           compile : ;
-varables:       stack-ptr rstack-ptr dict-ptr
-memory:         read write move
-parsing:        #
-math:           + - * / % 
-bin:            and or xor invert >> << 
+Implimentation
+	
+	Forth itself is essentially a group of memory structures that create the
+	illusion of a programming language.
+
+	Tinyforth has 3 structures:
+		|
+		| long stack[100];
+		| 	|
+		| 	| This is the stack that holds numbers.
+		| 	|
+		| 	| Every time you type in a value, or have a value returned
+		| 	| it's off this stack.
+		| 	
+		| 	
+		| void *return_stack[100];
+		| 	|
+		| 	| This is the stack that holds return addresses. 
+		| 	| 
+		| 	| Every time you run code
+		| 	|	1. Save current code-pointer on the return stack
+		| 	|	2. Jump to new code
+		| 	|	3. Run
+		| 	|	4. Jump back to code-pointer on the return stack
+		| 	
+		| 	
+		| dict_t dictionary_stack[50];
+		| 	|
+		| 	| This is a key:value namespace stack.
+		| 	| 
+		| 	| It follows this structure
+		| 	|	---------------
+		| 	|	char name[100];
+		| 	|	void* code; 
+		| 	|	---------------
+		| 	| 
+		| 	| Every time you run any code,
+		| 	|
+		| 	|	0. Look up the {name:code}
+		| 	|
+		| 	|	1. Save current code pointer on the return stack
+		| 	|	2. Jump to new {*code}
+		| 	|	3. Run
+		| 	|	4. Jump back to code-pointer on the return stack
