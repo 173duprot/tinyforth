@@ -5,3 +5,7 @@ cc							\
 	-O0 	`#Optimizations will fuck this up`	\
 	-o forth					\
 	forth.c
+
+./forth
+
+rm forth
