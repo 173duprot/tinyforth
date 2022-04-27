@@ -15,8 +15,9 @@ Abstract
 	
 	To me, this is very un-forth like.
 
-	ABLEforth solves this issue by putting parsing words front and center stange,
-	there is no built-in literals, all data-types are handled the same way. 
+	ABLEforth solves this issue by putting parsing words front and center
+	stage, there is no built-in literals, all data-types are handled the
+	same way. 
 	
 	Tinyforth takes ABLE's formula and expands upon it drastically - being
 	unafraid to be completely non-standard in it's quest for simplicity and
