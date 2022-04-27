@@ -1,6 +1,4 @@
-\ tinyforth
-
-	Forth in under 100 lines of GNU C99.
+\ tinyforth -- Forth in under 100 lines of GNU C99.
 
 Run
 	
