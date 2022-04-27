@@ -2,6 +2,11 @@
 
 	Forth in under 100 lines of GNU C99.
 
+Run
+	
+	cc forth.c -o forth
+
+
 Abstract
 
 	Forth is a extremly powerful, typeless language, however, imo, its elegence
