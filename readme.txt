@@ -72,3 +72,30 @@ Implimentation
 			|	2. Jump to new {*code}
 			|	3. Run
 			|	4. Jump back to code-pointer on the return stack
+
+
+Diffrences from normal Forth
+	
+	Dictionary stack
+		Tinyforth's dictionary is far more extinsable than a traditional
+		forth. It uses a namespace stack rather than a linked list,
+		allowing code to be anywhere, and allowing pointers to (if you
+		want) be easily changed.
+
+		Tinyforth also has a very diffrent method of lookup than other
+		forth's. The lookup actually executes code within the words,
+		allowing you to not only script the runtime, like ABLE does,
+		but also allowing you to script the dictionary itself.
+
+		The search is not performed by a singular program, but
+		rather the words checking themselves, then passing onto
+		the next word in the dictionary. This barely affects runtime
+		performance (adding in a few extra jumps), while also allowing 
+		extremely powerful meta-scripting.
+
+		For example, you could have a word that simply ends the dictionary
+		search, allowing you to have completely local scope.
+
+		You could also pass on to a custom dictionary, allowing you to
+		essentially hijack the search, completely changing the entire
+		language instantly.

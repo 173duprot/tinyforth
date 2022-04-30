@@ -2,7 +2,7 @@
 #include <string.h>
 
 // Main Memory
-char memory[1000000];
+char memory[100000];
 char *mem = memory;
 
 // Dictionary entry type
@@ -44,22 +44,22 @@ int main() {
 	
 	/* Stacks */
 
-	long stack[100];
+	long stack[10];
 	*sp = (long *)ALLOC(stack);
+
+	void *return_stack[10];
+	*rsp = (void **)ALLOC(return_stack);
 	
-	void *return_stack[100];
-	**rsp = (void **)ALLOC(return_stack);
-	
-	dict_t dictionary_stack[20];
+	dict_t dictionary_stack[10];
 	*dsp = (dict_t *)ALLOC(dictionary_stack);
 	
 	/* Memory */
 	dict_t *test = (dict_t *)DEFINE("test", &&test);
-	goto *(test->code);
-
+	goto *(->code);
+	
 	return 0;
-
+	
 	test:
-		puts("Hello World!");
+		puts("Sussy balls!");
 		return 0;
 }
