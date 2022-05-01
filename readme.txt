@@ -77,6 +77,7 @@ Implimentation
 Diffrences from normal Forth
 	
 	Dictionary stack
+
 		Tinyforth's dictionary is far more extinsable than a traditional
 		forth. It uses a namespace stack rather than a linked list,
 		allowing code to be anywhere, and allowing pointers to (if you
@@ -99,3 +100,6 @@ Diffrences from normal Forth
 		You could also pass on to a custom dictionary, allowing you to
 		essentially hijack the search, completely changing the entire
 		language instantly.
+
+		This dramatically shifts the entire forth meta-programming
+		experience, while also dramatically simplifying the implimentation.
