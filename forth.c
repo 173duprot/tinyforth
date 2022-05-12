@@ -55,7 +55,7 @@ int main() {
 	
 	/* Memory */
 	char code[] = "lookup";
-	char cp* = code;
+	char *cp = code;
 	
 	dict_t *bye = (dict_t *)DEFINE("bye", &&bye);
 	dict_t *lookup = (dict_t *)DEFINE("lookup", &&lookup);
