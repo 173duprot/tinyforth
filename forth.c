@@ -31,11 +31,18 @@ int main() {
 		*dsp 	= (void **)	ALLOC(void * [10]);
 	
 	/* Memory */
-	void *word[] = { &&lookup, &&bye };
+	void *code = &&code;
+	void *bye = &&bye;
+	void *word[] = { code, bye };
 	*ip = (word)-1;
 	NEXT;
 	
-	lookup:
+	docol:
+		**rsp = *ip;
+		(*rsp)++;
+
+	
+	code:
 		puts("Run Code");
 		NEXT;
 	
