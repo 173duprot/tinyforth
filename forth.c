@@ -8,17 +8,20 @@ char *mem = memory;
 #define ALLOC(x)			\
 		mem;			\
 		mem += sizeof(x);	\
-		
+
 #define NEXT 				\
 		(*ip)=(*nip);		\
 		(*nip)++;		\
-		goto ***(ip);		\
+		goto **(*ip);		\
+
+#define PUSH(x,sp)	*(sp) = (x); (sp)++;
+#define POP(sp)		*((sp)--);
 		
 int main() {
 	
 	// Instruction Pointer
-	void	***ip	= (void ***)	ALLOC(void **);
-	void	***nip	= (void ***)	ALLOC(void **);
+	void	****ip	= (void ****)	ALLOC(void ***);
+	void	****nip	= (void ****)	ALLOC(void ***);
 	
 	// Stack
 	long	**sp 	= (long **)	ALLOC(long *);
@@ -33,14 +36,24 @@ int main() {
 		*dsp 	= (void **)	ALLOC(void * [10]);
 	
 	/* Memory */
-	void *word[] = { &&code, &&bye };
+	void *bye		= &&bye;
+	void *code		= &&code;
+	void *exit		= &&exit;
+	void **subword[]	= { &&docol, &code, &exit };
+	void **word[]		= { &&docol, &subword, &bye };
 	*nip = word;
 	NEXT;
 	
 	docol:
-		**rsp = *ip;
-		(*rsp)++;
+		PUSH(*nip, *rsp);
 
+		/* set nip to the next thing and run it */
+		(*nip)	= *(*ip + 1); 
+		NEXT;
+
+	exit:
+		*nip = POP(*rsp);
+		NEXT;
 	
 	code:
 		puts("Run Code");
