@@ -10,13 +10,15 @@ char *mem = memory;
 		mem += sizeof(x);	\
 		
 #define NEXT 				\
-		(*ip)++;		\
+		(*ip)=(*nip);		\
+		(*nip)++;		\
 		goto ***(ip);		\
 		
 int main() {
 	
 	// Instruction Pointer
 	void	***ip	= (void ***)	ALLOC(void **);
+	void	***nip	= (void ***)	ALLOC(void **);
 	
 	// Stack
 	long	**sp 	= (long **)	ALLOC(long *);
@@ -31,10 +33,8 @@ int main() {
 		*dsp 	= (void **)	ALLOC(void * [10]);
 	
 	/* Memory */
-	void *code = &&code;
-	void *bye = &&bye;
-	void *word[] = { code, bye };
-	*ip = (word)-1;
+	void *word[] = { &&code, &&bye };
+	*nip = word;
 	NEXT;
 	
 	docol:
