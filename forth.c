@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+// ha
+
 // Main Memory
 char memory[100000];
 char *mem = memory;
