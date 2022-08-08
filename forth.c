@@ -7,45 +7,54 @@ char *mem = memory;
 		
 #define ALLOC(x) 	mem; mem += sizeof(x);
 #define NEXT		(*ip)++; goto ****ip;
-#define POP(x,ptr)	(ptr)--; x=*(ptr);
-#define PUSH(x,ptr)	*(ptr)=x; (ptr)++;
+#define POP(x,ptr)	(ptr)--; x = *(ptr);
+#define PUSH(x,ptr)	*(ptr) = x; (ptr)++;
 		
 int main() {
 
 	/* Memory */
+	
 	void  ****ip = (void ****) ALLOC(void **);     // Instruction Pointer
-
-	long   **sp = (long **)	 ALLOC(long *);	     // Stack Pointer
-	        *sp = (long *)	 ALLOC(long[10]);    // Stack
-
-	void ****rsp = (void ****)ALLOC(void **);     // Return Stack Pointer
-	       *rsp = (void ***) ALLOC(void *[10]);  // Return Stack
-
-	void ***dsp = (void ***) ALLOC(void **);     // Dictonary Stack Pointer
-	       *dsp = (void **)  ALLOC(void * [10]); // Dictionary Stack
+	
+	char    **cp = (char **)   ALLOC(char *);      // Character Pointer
+	         *cp = (char *)    ALLOC(char [80]);   // Input Buffer
+	
+	long    **sp = (long **)   ALLOC(long *);      // Stack Pointer
+	         *sp = (long *)	   ALLOC(long[10]);    // Stack
+	
+	void ****rsp = (void ****) ALLOC(void **);     // Return Stack Pointer
+	        *rsp = (void ***)  ALLOC(void *[10]);  // Return Stack
+	
+	void  ***dsp = (void ***)  ALLOC(void **);     // Dictonary Stack Pointer
+	        *dsp = (void **)   ALLOC(void * [10]); // Dictionary Stack
 	
 	/* Code */
-	void *bye = &&bye;
-	void *ret = &&ret;
-	void *code = &&code;
-
-	void **test[] = { &&call, &code, &ret };
-	void ***word[] = { &test, &bye };
-
+	void *lookup	= && lookup;
+	void *call	= && call;
+	void *retrn	= && retrn;
+	void *bye	= && bye;
+	void *code	= && code;
+	
+	void **test[]	= { call, &code, &retrn };
+	void ***word[]	= { &test, &bye };
+	
 	*ip = word;
 	goto ****ip;
 	
-	call:	puts("Call");
+	lookup: puts("lookup");
+	
+	
+	
+	call:	puts("call");
 		PUSH(*ip,*rsp);
 		*ip = (**ip);
 		NEXT;
-
-
-	ret:	puts("Ret");
+	
+	retrn:	puts("return");
 		POP(*ip,*rsp);
 		NEXT;
 	
-	code:	puts("Run Code");
+	code:	puts("run code");
 		NEXT;
 	
 	bye:	puts("bye");
