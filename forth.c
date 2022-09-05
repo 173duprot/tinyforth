@@ -64,4 +64,8 @@ int main() {
 
 	lookup:	puts("lookup");
 		NEXT;
+
+	compile:
+		puts("compile");
 }
+
