@@ -22,11 +22,9 @@ int main() {
 	void *      call = && call;
 	void *     retrn = && retrn;
 	void *       bye = && bye;
-	void *    lookup = && lookup;
 	void *     input = && input;
 	
 	/* Secondary Words */
-	void **end[]	= { call, &lookup };
 	void **test[]	= { call, &input, &retrn };
 	
 	/* Starting The Dictionary */
@@ -48,12 +46,6 @@ int main() {
 	retrn:	puts("return");
 		POP(rstack, ip);
 		NEXT;
-	
-	bye:	puts("bye");
-		return 0;
-
-	lookup:	puts("lookup");
-		NEXT;
 
 	input: puts("input");
 	       putchar('>');
@@ -63,4 +55,8 @@ int main() {
                } while (*(mem-1) != '\n');
 	       NEXT;
 
+	parse: puts("parse");
+
+	bye:	puts("bye");
+		return 0;
 }
