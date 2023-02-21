@@ -13,25 +13,24 @@ char *mem = memory;
 int main() {
 	
 	/* Memory */
+	void *        dp;                       // Dictionary Pointer
 	void ***      ip = ALLOC(void **[20]);  // Instruction Pointer
-	char *        in = ALLOC(char   [80]);  // Input Buffer
 	long *     stack = ALLOC(long   [10]);  // Stack
 	void ***  rstack = ALLOC(void  *[10]);  // Return Stack
-	void **     dict = ALLOC(void  *[10]);  // Dictionary Stack
 	
 	/* Core Words*/
 	void *      call = && call;
 	void *     retrn = && retrn;
 	void *       bye = && bye;
-	void *     shell = && shell;
 	void *    lookup = && lookup;
+	void *     input = && input;
 	
 	/* Secondary Words */
 	void **end[]	= { call, &lookup };
-	void **test[]	= { call, &shell, &retrn };
+	void **test[]	= { call, &input, &retrn };
 	
-	/* Filling The Dictionary */
-	PUSH(dict, test);
+	/* Starting The Dictionary */
+	dp = test;
 	
 	/* Run */
 	PUSH(rstack, ip);
@@ -53,19 +52,15 @@ int main() {
 	bye:	puts("bye");
 		return 0;
 
-	shell:	putchar('>');
-		PUSH(rstack, in);
-		do {
-			in++;
-			*in = getchar();
-		} while(*in != '\n');
-		POP(rstack, in);
-		NEXT;
-
 	lookup:	puts("lookup");
 		NEXT;
 
-	compile:
-		puts("compile");
-}
+	input: puts("input");
+	       putchar('>');
+	       do {
+	               *mem = getchar();
+	                mem += sizeof(char);
+               } while (*(mem-1) != '\n');
+	       NEXT;
 
+}
