@@ -1,21 +1,24 @@
+#pragma GCC diagnostic ignored "-Wno-deprecated-declarations"
+#pragma GCC diagnostic ignored "-Wno-incompatible-pointer-types"
+
 #include <stdio.h>
 #include <string.h>
 
 // Main Memory
-char memory[100000];
-char *mem = memory;
+char xxxx[100000];
+char *mem = xxxx;
 		
-#define ALLOC(x) 	mem; mem += sizeof(x);
 #define NEXT		ip++; goto ***ip;
+#define ALLOC(x) 	mem; mem += sizeof(x);
 #define PUSH(ptr,x)     *ptr = x; ptr++;
 #define POP(ptr,x)      ptr--; x = *ptr;
 		
 int main() {
 	
 	/* Memory */
-	void *        dp;                       // Dictionary Pointer
-	void ***      ip = ALLOC(void **[20]);  // Instruction Pointer
-	long *     stack = ALLOC(long   [10]);  // Stack
+	void ***  ip;   // Instruction Pointer
+	void *    dict; // Dictionary Pointer
+	long *    stack =  ALLOC(long   [10]);  // Stack
 	void ***  rstack = ALLOC(void  *[10]);  // Return Stack
 	
 	/* Core Words*/
@@ -25,16 +28,14 @@ int main() {
 	void *     input = && input;
 	
 	/* Secondary Words */
-	void **test[]	= { call, &input, &retrn };
+	void **indirect[]	= { call, &input, &retrn };
+	void **test[]		= { &indirect, &bye };
 	
 	/* Starting The Dictionary */
-	dp = test;
+	dict = test;
 	
 	/* Run */
-	PUSH(rstack, ip);
-	 PUSH(ip, &test);
-	 PUSH(ip, &bye);
-	POP(rstack, ip);
+	ip = &test;
 	goto ***ip;
 	
 	
@@ -49,10 +50,8 @@ int main() {
 
 	input: puts("input");
 	       putchar('>');
-	       do {
-	               *mem = getchar();
-	                mem += sizeof(char);
-               } while (*(mem-1) != '\n');
+	       gets(mem);
+	       mem += sizeof(strlen(mem)+1);
 	       NEXT;
 
 	parse: puts("parse");
