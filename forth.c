@@ -9,15 +9,15 @@ char xxxx[100000];
 char *mem = xxxx;
 		
 #define NEXT		ip++; goto ***ip;
-#define ALLOC(x) 	({ mem; mem += sizeof(x); })
+#define ALLOC(x) 	mem; mem += sizeof(x);
 #define DEFINE(x)	({ *dict = x; dict--; })
-#define PUSH(ptr,x)     *ptr  = x; ptr ++;
+#define PUSH(ptr,x)     ({ *ptr  = x; ptr ++; })
 #define POP(ptr)        ({ ptr--; *ptr; })
 		
 int main() {
 	
 	/* Memory */
-	void ***  ip;   // Instruction Pointer
+	void ***  ip; // Instruction Pointer
 	void **** dict   = ALLOC(void ***[100]); dict += 100; // Dictionary
 	long *    stack  = ALLOC(long    [10]);  // Stack
 	void ***  rstack = ALLOC(void   *[10]);  // Return Stack
