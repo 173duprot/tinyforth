@@ -8,11 +8,11 @@
 char xxxx[100000];
 char *mem = xxxx;
 		
-#define NEXT		ip++; goto ***ip;
+#define NEXT		goto ***(++ip)
 #define ALLOC(x) 	mem; mem += sizeof(x);
-#define DEFINE(x)	({ *dict = x; dict--; })
-#define PUSH(ptr,x)     ({ *ptr  = x; ptr ++; })
-#define POP(ptr)        ({ ptr--; *ptr; })
+#define DEFINE(x)	*(dict--) = x
+#define PUSH(ptr,x)     *(ptr++)  = x
+#define POP(ptr)        *(--ptr)
 		
 int main() {
 	
@@ -68,6 +68,7 @@ int main() {
 
 	def:   puts("def");
 	       DEFINE(POP(stack));
+               NEXT;
 
 	input: puts("input");
 	       gets(mem);
@@ -76,7 +77,7 @@ int main() {
 
 	parse: puts("parse");
 	       ip = dict;
-	       goto ***ip;
+	       NEXT;
 
 
 }
