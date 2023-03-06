@@ -9,7 +9,7 @@ char xxxx[100000];
 char *mem = xxxx;
 		
 #define NEXT		goto ***(++ip)
-#define ALLOC(x) 	mem; mem += sizeof(x);
+#define ALLOC(x) 	((mem+=sizeof(x))-sizeof(x))
 #define DEFINE(x)	*(dict--) = x
 #define PUSH(ptr,x)     *(ptr++)  = x
 #define POP(ptr)        *(--ptr)
@@ -33,25 +33,12 @@ int main() {
 	void **test[]		= { &indirect, &bye };
 	
 	/* Filling The Dictionary */
-	DEFINE(test);
+	DEFINE(&test);
 	
 	/* Run */
 	ip = &test;
 	goto ***ip;
 	
-//	name:	puts("name");
-//		{
-//		    int flag = 1;
-//		    char name[]="test";
-//		    char *in = POP(stack);
-//		    for(int i=0; in[i]!=' ' && in[i]!='\0'; i++){
-//		    	if(in[i] != name[i]) {
-//		    	    flag = 0;
-//		    	}
-//		        putchar(in[i]);
-//		    }
-//		}	
-
 	call:	puts("call");
 		PUSH(rstack, ip);
 		ip = *ip;
@@ -60,24 +47,20 @@ int main() {
 	retrn:	puts("return");
 		ip = POP(rstack);
 		NEXT;
-
+	
 	bye:	puts("bye");
 		return 0;
-
-	compile:puts("compile");
-
+	
 	def:   puts("def");
 	       DEFINE(POP(stack));
-               NEXT;
-
+	       NEXT;
+	
 	input: puts("input");
 	       gets(mem);
 	       mem += sizeof(strlen(mem)+1);
 	       NEXT;
-
+	
 	parse: puts("parse");
 	       ip = dict;
 	       NEXT;
-
-
 }

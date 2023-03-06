@@ -54,24 +54,19 @@ Implimentation
 			|	4. Jump back to code-pointer on the return stack
 			
 			
-		dict_t dictionary_stack[50];
+		void*** dict[100];
 
-			| This is a key:value namespace stack.
-
-			| It follows this structure
-			|	---------------
-			|	char name[100];
-			|	void* code; 
-			|	---------------
+			| This is a code pointer stack
+			| It has the same composition as an indirect word.
 
 			| Every time you run any code,
 			|
-			|	0. Look up the {name:code}
-			|
-			|	1. Save current code pointer on the return stack
-			|	2. Jump to new {*code}
-			|	3. Run
-			|	4. Jump back to code-pointer on the return stack
+			|	0. Start Running the Dictionary
+			|	1. When a word matches the current word
+			|		- Compiled words will push their address to mem
+			|		- Macro words will run immediatly
+			|	2. When a \n or \0 is hit, it will close off the
+			|	   memory space and then run the compiled code
 
 
 Diffrences from normal Forth
