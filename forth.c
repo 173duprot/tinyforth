@@ -25,13 +25,13 @@ int main() {
 	/* Core Words*/
 	void *      call = && call;
 	void *     retrn = && retrn;
-	void *       bye = && bye;
+	void *      quit = && quit;
 	void *     input = && input;
 	void *     print = && print;
 	
 	/* Secondary Words */
 	void **indirect[]	= { call, &input, &print, &retrn };
-	void **test[]		= { &indirect, &bye };
+	void **test[]		= { &indirect, &quit };
 	
 	/* Filling The Dictionary */
 	DEFINE(&test);
@@ -39,33 +39,34 @@ int main() {
 	/* Run */
 	ip = &test;
 	goto ***ip;
-	
-	call:	puts("call");
+
+	call:	puts("-> call");	// Call -> Creates local scope.
 		PUSH(rstack, ip);
 		ip = *ip;
 		NEXT;
 	
-	retrn:	puts("return");
+	retrn:	puts("-> return");	// Retrn -> Exists local scope.
 		ip = POP(rstack);
 		NEXT;
 	
-	bye:	puts("bye");
+	quit:	puts("-> quit");	// Quit -> Kills program
 		return 0;
 	
-	def:   puts("def");
+	def:   puts("-> def");
 	       DEFINE(POP(stack));
 	       NEXT;
 	
-	input: puts("input");
+	parse: puts("-> parse");
+	       ip = dict;
+	       NEXT;
+
+	input: puts("-> input");
 	       gets(mem);
 	       PUSH(stack, ALLOC( strlen(mem)+1 ) );
 	       NEXT;
 
-	print: puts("print");
+	print: puts("-> print");
 	       puts(POP(stack));
 	       NEXT;
 	
-	parse: puts("parse");
-	       ip = dict;
-	       NEXT;
 }
