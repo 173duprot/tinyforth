@@ -27,9 +27,10 @@ int main() {
 	void *     retrn = && retrn;
 	void *       bye = && bye;
 	void *     input = && input;
+	void *     print = && print;
 	
 	/* Secondary Words */
-	void **indirect[]	= { call, &input, &retrn };
+	void **indirect[]	= { call, &input, &print, &retrn };
 	void **test[]		= { &indirect, &bye };
 	
 	/* Filling The Dictionary */
@@ -57,7 +58,11 @@ int main() {
 	
 	input: puts("input");
 	       gets(mem);
-	       mem += sizeof(strlen(mem)+1);
+	       PUSH(stack, ALLOC( strlen(mem)+1 ) );
+	       NEXT;
+
+	print: puts("print");
+	       puts(POP(stack));
 	       NEXT;
 	
 	parse: puts("parse");
