@@ -13,6 +13,7 @@ char *mem = xxxx;
 #define DEFINE(x)	*(dict--) = x
 #define PUSH(ptr,x)     *(ptr++)  = x
 #define POP(ptr)        *(--ptr)
+#define LOG(str)	fputs(str, stderr);
 		
 int main() {
 	
@@ -40,7 +41,7 @@ int main() {
 	ip = &test;
 	goto ***ip;
 
-	call:	puts("-> call");	// Call -> Creates local scope.
+	call:	puts("-> call");		// Call -> Creates local scope.
 		PUSH(rstack, ip);
 		ip = *ip;
 		NEXT;
