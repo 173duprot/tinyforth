@@ -3,7 +3,7 @@
 
 Run
 	
-	cc forth.c -o forth
+	gcc -fpermissive -w forth.c
 
 
 Abstract
