@@ -1,5 +1,4 @@
-//----------------------------------------------------------------------------//
-#include "io.h"
+#include	"../io.h"
 
 // Main Memory
 char xxxx[100000];
@@ -17,43 +16,37 @@ int main() {
 	long *    stack  = ALLOC(long    [10]);			// Stack
 	void ***  rstack = ALLOC(void   *[10]);			// Return Stack
 	
-	/* Direct Words*/
-	void *      call = && call;
-	void *     retrn = && retrn;
-	void *      quit = && quit;
-	void *     input = && input;
-	void *     print = && print;
+	/* Pointers */
+	void *      QUIT = &&quit;
+	void *      TEST = &&test;
+	void *     RETRN = &&retrn;
 	
+	/* Direct Words */
+	void *      quit = &QUIT;
+	void *      test = &TEST;
+	void *     retrn = &RETRN;
+
 	/* Indirect Words */
-	void **indirect[]	= { call, &input, &print, &retrn };
+	void *INDIRECT[] = { &&call, test, retrn };
+	void *indirect   = &INDIRECT;
 	
 	/* Init */
-
-	void **array[]		= { &indirect, &quit };
-	ip =  &array;
+	void *ex[] = { indirect, quit }; 
+	ip = &ex;
 	goto ***ip;
+
 
 	/* Code */
 
-	call:	puts("-> call");	// Call -> Creates local scope.
-		PUSH(rstack, ip);
-		ip = *ip;
-		NEXT(++);
-	
-	retrn:	puts("-> return");	// Retrn -> Exists local scope.
-		ip = POP(rstack);
-		NEXT(++);
-	
-	quit:	puts("-> quit");	// Quit -> Kills program.
-		return 0;
+	quit:	return 0;
 
-	input: puts("-> input");
-	       gets(mem);
-	       PUSH(stack, ALLOC( strlen(mem)+1 ) );
-	       NEXT(++);
+	test:	puts("success");
+		NEXT(++);
 
-	print: puts("-> print");
-	       puts(POP(stack));
-	       NEXT(++);
-	
+	call:	PUSH(rstack, ip);
+		ip = *ip;	
+		NEXT(++);
+
+	retrn:	ip = POP(rstack);
+		NEXT(++);
 }
