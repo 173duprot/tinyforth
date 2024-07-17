@@ -40,22 +40,10 @@ Implimentation
 		long *stack[10];
 
 			| This is the stack that holds numbers.
-			|
-			| Every time you type in a value, or have a value returned
-			| it's off this stack.
-			
 			
 		void *return_stack[100];
 
 			| This is the stack that holds return addresses. 
-
-			| Every time you run code
-			|	1. Save current code-pointer on the return stack
-			|	2. Jump to new code
-			|	3. Run
-			|	4. Jump back to code-pointer on the return stack
-
-			
 			
 		void*** dict[100];
 
@@ -65,11 +53,11 @@ Implimentation
 			| Every time you run any code,
 			|
 			|	0. Start Running the Dictionary
-			|	1. When a word matches the current word
+			|	1. When a lookup word matches the current word.
 			|		- Compiled words will push their address to mem
 			|		- Macro words will run immediatly
-			|	2. When a \n or \0 is hit, it will close off the
-			|	   memory space and then run the compiled code
+			|	2. When the end of the dict is reached, it will jump
+			|	   to the beginning of the compiled code.
 
 
 Diffrences from normal Forth

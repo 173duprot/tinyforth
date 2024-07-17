@@ -3,10 +3,10 @@
 
 // Main Memory
 char xxxx[100000];
-char *mem = xxxx;
+char *mem = xxxx;	
 		
 
-#define RUN(xx)		goto ***(xx ip)
+#define NEXT(xx)	goto ***(xx ip)
 #define ALLOC(x) 	((mem+=sizeof(x))-sizeof(x))
 #define DEFINE(x)	*(dict--) = x
 #define PUSH(ptr,x)     *(ptr++)  = x
