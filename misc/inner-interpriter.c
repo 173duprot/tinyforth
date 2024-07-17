@@ -17,20 +17,23 @@ int main() {
 	long *    stack  = ALLOC(long    [10]);			// Stack
 	void ***  rstack = ALLOC(void   *[10]);			// Return Stack
 	
-	/* Core Words*/
+	/* Direct Words*/
 	void *      call = && call;
 	void *     retrn = && retrn;
 	void *      quit = && quit;
 	void *     input = && input;
 	void *     print = && print;
 	
-	/* Secondary Words */
+	/* Indirect Words */
 	void **indirect[]	= { call, &input, &print, &retrn };
-	void **test[]		= { &indirect, &quit };
 	
-	/* Run */
-	ip = &test;
+	/* Init */
+
+	void **array[]		= { &indirect, &quit };
+	ip =  &array;
 	goto ***ip;
+
+	/* Code */
 
 	call:	puts("-> call");	// Call -> Creates local scope.
 		PUSH(rstack, ip);

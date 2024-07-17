@@ -1,5 +1,0 @@
-To create a inner interpriter we need three things.
-
-A "instruction pointer" (ip), 
-A value stack (stack)
-A return stack

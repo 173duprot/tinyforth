@@ -109,7 +109,14 @@ Diffrences from normal Forth
 
 How it works
 
-	// NOTE: [&&x] syntax is "lables as values" gcc exstention.
+
+INNER INTERPRITER
+
+	NOTES
+
+		1. Please follow along with the simplified code in ./misc/inner-interpriter.c
+
+		2. [&&x] syntax is "lables as values" gcc exstention.
 
 	Words
 		
@@ -203,68 +210,6 @@ How it works
 			     [pop]
 				> ip = POP(rstack) // Resets the old ip
 				> NEXT(++)	   // Run B
-
-			
-		
-
-
-
-		Question.
-
-		What if we want to run an array of words from another array of words?
-
-		   	[a] -> [x][y][z]   - How do we do this???
-
-
-
-		Answer.
-
-			[a] -> [&&call][x][y][z]	 // We put code at the beginning that runs the sub-array
-
-			[a] -> [&&call][x][y][z][retrn]  // We put code at the    end    that runs the array
-
-
-		&&CALL
-
-		
-		Then we put code at the end, which jumps back up to the 
-	
-		Let's go through the standard code structure. 
-
-			> goto ***ip
-				> PUSH(rstack, ip) // Save ip current posision
-				> ip = *ip;        // Change the frame of refrence
-				> ip++;		// Itterate
-				> goto ***ip;
-
-
-
-
-		   	[a][b] -> [&&????][x][y][z]
-			 ^      ^      ^-------^
-			this	runs	which
-				this	runs
-					this
-
-
-			[a] -> [&&a][x][y][z]
-				--
-
-			This code will
-			
-				1. Save the current ip to a stack.
-	
-					PUSH(rstack, ip)
-
-				2. Point the ip to the sub-array
-
-					ip = *ip;
-
-					[a] -> [&&a][x][y][z]
-						  ^ip
-
-				3. Then itterate through like normal
-
 
 
 License
