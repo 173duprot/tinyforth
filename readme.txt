@@ -8,24 +8,26 @@ Run
 
 Abstract
 
-	Forth is a extremly powerful, typeless language, however, imo, its elegence
-	is offen tainted by small, unelegent standard peices of code, which limit
+	Forth is a extremly powerful, typeless language,
+	however, imo, its elegence is offen tainted by
+	small, unelegent, standard practices, which limit
 	hackability in a way that simply isn't forth-like.
 	
-	For example, in regular forth, literals are quite literally baked into the
-	interpriter, to the point where changing this behavior, adding debugigng 
-	features, anything - would require special hooks, weird hacks, and general
-	inconvient, uncomfortable and akward hacking.
+	For example, in regular forth, literals are quite
+	literally baked into the interpriter, to the point
+	where changing this behavior, adding debugigng 
+	features, anything - would require special hooks,
+	and weird hacks.
 	
 	To me, this is very un-forth like.
 
-	ABLEforth solves this issue by putting parsing words front and center
-	stage, there is no built-in literals, all data-types are handled the
-	same way. 
+	ABLEforth solves this issue by putting parsing
+	words front and center stage, there is no built-in
+	literals, all data-types are handled the same way. 
 	
-	Tinyforth takes ABLE's formula and expands upon it drastically - being
-	unafraid to be completely non-standard in it's quest for simplicity and
-	grockability.
+	Tinyforth takes ABLE's formula and expands upon it,
+	being unafraid to be completely non-standard in
+	it's quest for simplicity and elegance.
 
 
 Implimentation
@@ -35,7 +37,7 @@ Implimentation
 
 	Tinyforth has 3 structures:
 		
-		long stack[100];
+		long *stack[10];
 
 			| This is the stack that holds numbers.
 			|
@@ -52,6 +54,7 @@ Implimentation
 			|	2. Jump to new code
 			|	3. Run
 			|	4. Jump back to code-pointer on the return stack
+
 			
 			
 		void*** dict[100];
@@ -74,9 +77,14 @@ Diffrences from normal Forth
 	Dictionary stack
 
 		Tinyforth's dictionary is far more extinsable than a traditional
-		forth. It uses a namespace stack rather than a linked list,
-		allowing code to be anywhere, and allowing pointers to (if you
-		want) be easily changed.
+		forth. It uses a code pointer stack that grows backwards,
+		rather than a linked list. With a "call" word placed at the top. 
+
+		This means that all we need to do is point `ip` to the top of the
+		stack (dict), and run, and it will run lookup automatically.
+		
+		[][][][call][A][B][C][return]
+		       ^dict
 
 		Tinyforth also has a very diffrent method of lookup than other
 		forth's. The lookup actually executes code within the words,
@@ -98,6 +106,166 @@ Diffrences from normal Forth
 
 		This dramatically shifts the entire forth meta-programming
 		experience, while also dramatically simplifying the implimentation.
+
+How it works
+
+	// NOTE: [&&x] syntax is "lables as values" gcc exstention.
+
+	Words
+		
+		Words are running code through a double redirect.
+
+			[word] -> [&&word] -> [code]
+
+		You run this by 
+		
+			> goto ***word
+				
+				> (code)
+
+	Direct Threading
+		
+		Direct threading is an array of words.
+
+			[a][b][c]
+		
+		Itterating over them using a pointer.
+	
+			[a][b][c]
+			 ^ip
+
+		You run this just the same, but the (code) now has
+		itteration and a goto at the end.
+
+			> goto ***ip
+			
+			    [a]
+				> (code)
+				> ++ip;		// Itterate
+				> goto ***ip 	// Run B
+
+			    [b]
+				> (code)
+				> ++ip;		// Itterate
+				> goto ***ip;	// Run C
+				
+				etc...
+
+		The NEXT(xx) macro is shorthand for the itterate-run structure.
+
+			ie. NEXT(++) -> goto ***(++ip)
+
+
+	Indirect threading 
+
+
+		Indirect threading is an array of arrays.
+
+			[a][b][c]
+
+			[a] -> [x][y][z]
+
+
+		Using a stack to keep track of instruction pointer positions.
+
+			[a] -> [ . . . ]	
+			 ^ip 			*push()
+
+			[a] -> [ . . . ]	
+			        ^ip...^ip 	*runs
+
+			[a] -> [ . . . ]
+			 ^ip 			*pop()
+			
+			
+
+		By putting a special code at the beginning and end of the array.
+
+			[a] -> [&&push] [...] [pop]
+		
+
+
+		You still run this just the same.
+
+			> goto ***ip
+
+			     [&&push]
+
+				> PUSH(rstack, ip) // Save ip current posision
+				> ip = *ip;        // Change the frame of refrence
+				> NEXT(++)	   // Run [...]
+				
+		             [...]
+				> (...)
+				> (...)
+				> (...)
+
+			     [pop]
+				> ip = POP(rstack) // Resets the old ip
+				> NEXT(++)	   // Run B
+
+			
+		
+
+
+
+		Question.
+
+		What if we want to run an array of words from another array of words?
+
+		   	[a] -> [x][y][z]   - How do we do this???
+
+
+
+		Answer.
+
+			[a] -> [&&call][x][y][z]	 // We put code at the beginning that runs the sub-array
+
+			[a] -> [&&call][x][y][z][retrn]  // We put code at the    end    that runs the array
+
+
+		&&CALL
+
+		
+		Then we put code at the end, which jumps back up to the 
+	
+		Let's go through the standard code structure. 
+
+			> goto ***ip
+				> PUSH(rstack, ip) // Save ip current posision
+				> ip = *ip;        // Change the frame of refrence
+				> ip++;		// Itterate
+				> goto ***ip;
+
+
+
+
+		   	[a][b] -> [&&????][x][y][z]
+			 ^      ^      ^-------^
+			this	runs	which
+				this	runs
+					this
+
+
+			[a] -> [&&a][x][y][z]
+				--
+
+			This code will
+			
+				1. Save the current ip to a stack.
+	
+					PUSH(rstack, ip)
+
+				2. Point the ip to the sub-array
+
+					ip = *ip;
+
+					[a] -> [&&a][x][y][z]
+						  ^ip
+
+				3. Then itterate through like normal
+
+
 
 License
 

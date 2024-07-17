@@ -4,11 +4,9 @@
 // Main Memory
 char xxxx[100000];
 char *mem = xxxx;
-		
 
-#define RUN(xx)		goto ***(xx ip)
+#define NEXT(xx)	goto ***(xx ip)
 #define ALLOC(x) 	((mem+=sizeof(x))-sizeof(x))
-#define DEFINE(x)	*(dict--) = x
 #define PUSH(ptr,x)     *(ptr++)  = x
 #define POP(ptr)        *(--ptr)
 
@@ -16,7 +14,6 @@ int main() {
 	
 	/* Memory */
 	void ***  ip;						// Instruction Ptr
-	void **** dict   = ALLOC(void ***[100]); dict += 100;	// Dictionary
 	long *    stack  = ALLOC(long    [10]);			// Stack
 	void ***  rstack = ALLOC(void   *[10]);			// Return Stack
 	
@@ -30,9 +27,6 @@ int main() {
 	/* Secondary Words */
 	void **indirect[]	= { call, &input, &print, &retrn };
 	void **test[]		= { &indirect, &quit };
-	
-	/* Filling The Dictionary */
-	DEFINE(&test);
 	
 	/* Run */
 	ip = &test;
@@ -49,14 +43,6 @@ int main() {
 	
 	quit:	puts("-> quit");	// Quit -> Kills program.
 		return 0;
-	
-	def:   puts("-> def");
-	       DEFINE(POP(stack));
-	       NEXT(++);
-	
-	parse: puts("-> parse");
-	       ip = dict;
-	       NEXT(++);
 
 	input: puts("-> input");
 	       gets(mem);
