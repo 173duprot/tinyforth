@@ -107,8 +107,6 @@ Diffrences from normal Forth
 		This dramatically shifts the entire forth meta-programming
 		experience, while also dramatically simplifying the implimentation.
 
-How it works
-
 
 INNER INTERPRITER
 
